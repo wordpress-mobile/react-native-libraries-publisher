@@ -67,6 +67,12 @@ subprojects {
                         groupId = "org.wordpress-mobile"
                         artifactId = "react-native-get-random-values"
                         version = "1.4.0"
+
+                        versionMapping {
+                            allVariants {
+                                fromResolutionOf("releaseRuntimeClasspath")
+                            }
+                        }
                     }
                 }
             }
