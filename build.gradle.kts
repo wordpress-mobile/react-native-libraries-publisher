@@ -18,7 +18,21 @@ project.ext.set("compileSdkVersion", defaultCompileSdkVersion)
 project.ext.set("minSdkVersion", defaultMinSdkVersion)
 project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
 
-allprojects {
+subprojects {
+    apply(plugin = "maven-publish")
+
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                url = uri("s3://a8c-libs.s3.amazonaws.com/android")
+                credentials(AwsCredentials::class) {
+                    accessKey = System.getenv("AWS_ACCESS_KEY")
+                    secretKey = System.getenv("AWS_SECRET_KEY")
+                }
+            }
+        }
+    }
+
     repositories {
         exclusiveContent {
             forRepository {
@@ -40,6 +54,21 @@ allprojects {
             dependencySubstitution {
                 substitute(module("com.facebook.react:react-native"))
                     .with(module("com.facebook.react:react-native:$reactNativeVersion"))
+            }
+        }
+    }
+
+    afterEvaluate {
+        project(":react-native-get-random-values").afterEvaluate {
+            configure<PublishingExtension> {
+                publications {
+                    create<MavenPublication>("S3") {
+                        from(components.get("release"))
+                        groupId = "org.wordpress-mobile"
+                        artifactId = "react-native-get-random-values"
+                        version = "1.4.0"
+                    }
+                }
             }
         }
     }
