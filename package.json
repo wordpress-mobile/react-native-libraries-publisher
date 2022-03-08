@@ -1,0 +1,5 @@
+{
+    "devDependencies": {
+	"react-native-get-random-values": "1.4.0"
+    }
+}
