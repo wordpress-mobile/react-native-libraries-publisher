@@ -1,13 +1,7 @@
 import org.json.JSONObject
 
 plugins {
-    id("com.github.node-gradle.node") version "3.1.1"
     id("com.android.library") apply false
-}
-
-node {
-    download.set(true)
-    version.set("16.14.0")
 }
 
 val defaultCompileSdkVersion = 30
