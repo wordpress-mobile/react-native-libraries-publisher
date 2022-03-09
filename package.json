@@ -3,6 +3,12 @@
     "react-native-get-random-values": "1.4.0",
     "react-native-reanimated": "2.4.1",
     "react-native-safe-area-context": "3.2.0",
+    "react-native-screens": "2.9.0",
+    "react-native-svg": "9.13.6",
+    "react-native-webview": "11.6.5",
+    "@react-native-masked-view/masked-view": "0.2.6",
+    "@react-native-clipboard/clipboard": "1.9.0",
+    "react-native-gesture-handler": "2.2.0",
     "react-native": "0.66.2"
   },
   "dependencies": {
