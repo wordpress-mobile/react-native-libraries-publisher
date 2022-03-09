@@ -73,7 +73,17 @@ subprojects {
                         val packageVersion = packageDevDependencies.optString(project.name)
                         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
-                        from(components.get("release"))
+                        if (project.name == "react-native-reanimated" ) {
+                            val defaultArtifacts = configurations.getByName("default").artifacts
+                            if(defaultArtifacts.isEmpty()) {
+                                throw Exception("'$name' - No default artifact found, aborting publishing!")
+                            }
+                            val defaultArtifact = defaultArtifacts.getFiles().getSingleFile()
+                            artifact(defaultArtifact)
+                        }
+                        else {
+                            from(components.get("release"))
+                        }
                         groupId = "org.wordpress-mobile"
                         artifactId = project.name
                         version = packageVersion
