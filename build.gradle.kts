@@ -64,7 +64,7 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        val packageVersion = packageDevDependencies.optString(project.name)
+                        val packageVersion = getPackageVersion(project.name)
                         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
                         if (project.name == "react-native-reanimated" ) {
@@ -92,4 +92,13 @@ subprojects {
             }
         }
     }
+}
+
+fun getPackageVersion(projectName: String): String {
+    val jsonProperty = when {
+        projectName == "react-native-masked-view" -> "@react-native-masked-view/masked-view"
+        projectName == "react-native-clipboard" -> "@react-native-clipboard/clipboard"
+        else -> projectName
+    }
+    return packageDevDependencies.optString(jsonProperty)
 }
