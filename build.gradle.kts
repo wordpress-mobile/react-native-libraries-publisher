@@ -10,7 +10,6 @@ node {
     version.set("16.14.0")
 }
 
-val reactNativeVersion = "0.66.2"
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
@@ -23,6 +22,8 @@ project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
 // Fetch dependencies versions from package.json
 val packageJson = JSONObject(File("$rootDir/package.json").readText())
 val packageDevDependencies = packageJson.optJSONObject("devDependencies")
+
+val reactNativeVersion = packageDevDependencies.optString("react-native")
 
 subprojects {
     apply(plugin = "maven-publish")
@@ -72,7 +73,17 @@ subprojects {
                         val packageVersion = packageDevDependencies.optString(project.name)
                         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
-                        from(components.get("release"))
+                        if (project.name == "react-native-reanimated" ) {
+                            val defaultArtifacts = configurations.getByName("default").artifacts
+                            if(defaultArtifacts.isEmpty()) {
+                                throw Exception("'$name' - No default artifact found, aborting publishing!")
+                            }
+                            val defaultArtifact = defaultArtifacts.getFiles().getSingleFile()
+                            artifact(defaultArtifact)
+                        }
+                        else {
+                            from(components.get("release"))
+                        }
                         groupId = "org.wordpress-mobile"
                         artifactId = project.name
                         version = packageVersion
