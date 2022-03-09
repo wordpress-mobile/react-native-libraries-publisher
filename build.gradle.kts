@@ -8,7 +8,7 @@ node {
     version.set("16.14.0")
 }
 
-val reactNativeVersion = "0.66.4"
+val reactNativeVersion = "0.66.2"
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
