@@ -1,5 +1,6 @@
 {
-    "devDependencies": {
-	"react-native-get-random-values": "1.4.0"
-    }
+  "devDependencies": {
+    "react-native-get-random-values": "1.4.0",
+    "react-native-prompt-android": "https://raw.githubusercontent.com/wordpress-mobile/react-native-prompt-android/wp-fork-only-android-changes/react-native-prompt-android-1.0.0.tgz"
+  }
 }

@@ -10,3 +10,6 @@ pluginManagement {
 
 include(":react-native-get-random-values")
 project(":react-native-get-random-values").projectDir = File(rootProject.projectDir, "node_modules/react-native-get-random-values/android")
+
+include(":react-native-prompt-android")
+project(":react-native-prompt-android").projectDir = File(rootProject.projectDir, "node_modules/react-native-prompt-android/android")
