@@ -10,7 +10,6 @@ node {
     version.set("16.14.0")
 }
 
-val reactNativeVersion = "0.66.4"
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
@@ -23,6 +22,8 @@ project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
 // Fetch dependencies versions from package.json
 val packageJson = JSONObject(File("$rootDir/package.json").readText())
 val packageDevDependencies = packageJson.optJSONObject("devDependencies")
+
+val reactNativeVersion = packageDevDependencies.optString("react-native")
 
 subprojects {
     apply(plugin = "maven-publish")

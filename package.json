@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "react-native-get-random-values": "1.4.0",
-    "react-native-reanimated": "2.4.1"
+    "react-native-reanimated": "2.4.1",
+    "react-native": "0.66.2"
   }
 }
