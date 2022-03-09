@@ -1,7 +1,7 @@
 common-params:
   &docker-container
   docker#v3.8.0:
-    image: "public.ecr.aws/automattic/android-build-image:v1.1.0"
+    image: "public.ecr.aws/automattic/android-build-image:bc7c60a898d89d968aa8202c6b5bd08f91c1779e"
     propagate-environment: true
     environment:
       # DO NOT MANUALLY SET THESE VALUES!
@@ -14,4 +14,7 @@ steps:
     plugins:
       - *docker-container
     command: |
+      source /root/.bashrc
+      nvm install && nvm use
+      npm install
       ./gradlew publish
