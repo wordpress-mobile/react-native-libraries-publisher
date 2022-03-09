@@ -69,7 +69,10 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        val packageVersion = packageDevDependencies.optString(project.name)
+                        var packageVersion = packageDevDependencies.optString(project.name)
+                        if (project.name == "react-native-prompt-android") {
+                            packageVersion = "1.0.0"
+                        }
                         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
                         from(components.get("release"))
