@@ -1,3 +1,5 @@
+import org.json.JSONObject
+
 plugins {
     id("com.github.node-gradle.node") version "3.1.1"
     id("com.android.library") apply false
@@ -17,6 +19,10 @@ val defaultTargetSdkVersion = 30
 project.ext.set("compileSdkVersion", defaultCompileSdkVersion)
 project.ext.set("minSdkVersion", defaultMinSdkVersion)
 project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
+
+// Fetch dependencies versions from package.json
+val packageJson = JSONObject(File("$rootDir/package.json").readText())
+val packageDevDependencies = packageJson.optJSONObject("devDependencies")
 
 subprojects {
     apply(plugin = "maven-publish")
@@ -59,14 +65,17 @@ subprojects {
     }
 
     afterEvaluate {
-        project(":react-native-get-random-values").afterEvaluate {
+        afterEvaluate {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
+                        val packageVersion = packageDevDependencies.optString(project.name)
+                        println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
+
                         from(components.get("release"))
                         groupId = "org.wordpress-mobile"
-                        artifactId = "react-native-get-random-values"
-                        version = "1.4.0"
+                        artifactId = project.name
+                        version = packageVersion
 
                         versionMapping {
                             allVariants {
