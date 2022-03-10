@@ -13,11 +13,13 @@ node {
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
+val defaultBuildToolsVersion = "30.0.2"
 
 // Set project extra properties
 project.ext.set("compileSdkVersion", defaultCompileSdkVersion)
 project.ext.set("minSdkVersion", defaultMinSdkVersion)
 project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
+project.ext.set("buildToolsVersion", defaultBuildToolsVersion)
 
 // Fetch dependencies versions from package.json
 val packageJson = JSONObject(File("$rootDir/package.json").readText())
