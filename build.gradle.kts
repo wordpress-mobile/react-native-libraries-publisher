@@ -1,16 +1,9 @@
 import org.json.JSONObject
 
 plugins {
-    id("com.github.node-gradle.node") version "3.1.1"
     id("com.android.library") apply false
 }
 
-node {
-    download.set(true)
-    version.set("16.14.0")
-}
-
-val reactNativeVersion = "0.66.4"
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
@@ -23,6 +16,8 @@ project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
 // Fetch dependencies versions from package.json
 val packageJson = JSONObject(File("$rootDir/package.json").readText())
 val packageDevDependencies = packageJson.optJSONObject("devDependencies")
+
+val reactNativeVersion = packageDevDependencies.optString("react-native")
 
 subprojects {
     apply(plugin = "maven-publish")
@@ -69,13 +64,23 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        var packageVersion = packageDevDependencies.optString(project.name)
+                        var packageVersion = getPackageVersion(project.name)
                         if (project.name == "react-native-prompt-android") {
                             packageVersion = "1.0.0"
                         }
                         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
-                        from(components.get("release"))
+                        if (project.name == "react-native-reanimated" ) {
+                            val defaultArtifacts = configurations.getByName("default").artifacts
+                            if(defaultArtifacts.isEmpty()) {
+                                throw Exception("'$name' - No default artifact found, aborting publishing!")
+                            }
+                            val defaultArtifact = defaultArtifacts.getFiles().getSingleFile()
+                            artifact(defaultArtifact)
+                        }
+                        else {
+                            from(components.get("release"))
+                        }
                         groupId = "org.wordpress-mobile"
                         artifactId = project.name
                         version = packageVersion
@@ -90,4 +95,13 @@ subprojects {
             }
         }
     }
+}
+
+fun getPackageVersion(projectName: String): String {
+    val jsonProperty = when {
+        projectName == "react-native-masked-view" -> "@react-native-masked-view/masked-view"
+        projectName == "react-native-clipboard" -> "@react-native-clipboard/clipboard"
+        else -> projectName
+    }
+    return packageDevDependencies.optString(jsonProperty)
 }
