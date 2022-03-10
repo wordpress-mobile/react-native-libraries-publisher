@@ -8,7 +8,7 @@
     "react-native-webview": "11.6.2",
     "@react-native-masked-view/masked-view": "0.2.6",
     "@react-native-clipboard/clipboard": "1.9.0",
-    "react-native-gesture-handler": "2.2.0",
+    "react-native-gesture-handler": "2.3.1",
     "react-native": "0.66.2"
   },
   "dependencies": {
