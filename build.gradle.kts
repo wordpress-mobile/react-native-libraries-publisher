@@ -1,3 +1,4 @@
+import com.automattic.android.publish.CheckS3Version
 import org.json.JSONObject
 
 plugins {
@@ -19,6 +20,8 @@ val packageJson = JSONObject(File("$rootDir/package.json").readText())
 val packageDevDependencies = packageJson.optJSONObject("devDependencies")
 
 val reactNativeVersion = packageDevDependencies.optString("react-native")
+
+val publishGroupId = "org.wordpress-mobile"
 
 subprojects {
     apply(plugin = "maven-publish")
@@ -65,7 +68,7 @@ subprojects {
                         else {
                             from(components.get("release"))
                         }
-                        groupId = "org.wordpress-mobile"
+                        groupId = publishGroupId
                         artifactId = project.name
                         // version is set by 'publish-to-s3' plugin
 
@@ -80,12 +83,21 @@ subprojects {
         }
     }
 
-    project.tasks.withType(com.automattic.android.publish.PrepareToPublishToS3Task::class.java) {
+    tasks.withType(com.automattic.android.publish.PrepareToPublishToS3Task::class.java) {
         val packageVersion = getPackageVersion(project.name)
         println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
         // Override the default behaviour of 'publish-to-s3' plugin since we always want to specify the version
         tagName = packageVersion
+    }
+    tasks.register("assertVersionIsNotAlreadyPublished") {
+        doLast {
+            val packageVersion = getPackageVersion(project.name)
+            val checkS3Version = CheckS3Version(publishGroupId, project.name, packageVersion)
+            if (checkS3Version.check()) {
+                throw IllegalStateException("'${project.name}' version '$packageVersion' is already published!")
+            }
+        }
     }
 }
 

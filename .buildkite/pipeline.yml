@@ -17,4 +17,5 @@ steps:
       source /root/.bashrc
       nvm install && nvm use
       npm install
-      ./gradlew publish
+
+      .buildkite/publish-libraries.sh
