@@ -2,6 +2,7 @@ import org.json.JSONObject
 
 plugins {
     id("com.android.library") apply false
+    id("com.automattic.android.publish-to-s3") apply false
 }
 
 val defaultCompileSdkVersion = 30
@@ -21,18 +22,7 @@ val reactNativeVersion = packageDevDependencies.optString("react-native")
 
 subprojects {
     apply(plugin = "maven-publish")
-
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                url = uri("s3://a8c-libs.s3.amazonaws.com/android")
-                credentials(AwsCredentials::class) {
-                    accessKey = System.getenv("AWS_ACCESS_KEY")
-                    secretKey = System.getenv("AWS_SECRET_KEY")
-                }
-            }
-        }
-    }
+    apply(plugin = "com.automattic.android.publish-to-s3")
 
     repositories {
         exclusiveContent {
@@ -64,9 +54,6 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        val packageVersion = getPackageVersion(project.name)
-                        println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
-
                         if (project.name == "react-native-reanimated" ) {
                             val defaultArtifacts = configurations.getByName("default").artifacts
                             if(defaultArtifacts.isEmpty()) {
@@ -80,7 +67,7 @@ subprojects {
                         }
                         groupId = "org.wordpress-mobile"
                         artifactId = project.name
-                        version = packageVersion
+                        // version is set by 'publish-to-s3' plugin
 
                         versionMapping {
                             allVariants {
@@ -91,6 +78,14 @@ subprojects {
                 }
             }
         }
+    }
+
+    project.tasks.withType(com.automattic.android.publish.PrepareToPublishToS3Task::class.java) {
+        val packageVersion = getPackageVersion(project.name)
+        println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
+
+        // Override the default behaviour of 'publish-to-s3' plugin since we always want to specify the version
+        tagName = packageVersion
     }
 }
 
