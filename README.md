@@ -2,6 +2,8 @@
 
 The main purpose of this repository is to ease the process of adding and upgrading the React Native dependencies of Gutenberg, specifically, the part the related to publishing the artifacts of the Android libraries of the dependencies.
 
+**For now, this repository only supports dependencies that don’t have a forked repository, so when adding a package note that we can only use versions from the NPM registry (e.g. `"react-native-get-random-values": "1.4.0"`).**
+
 ## How to publish an artifact of a dependency
 
 ### When it's a new package
