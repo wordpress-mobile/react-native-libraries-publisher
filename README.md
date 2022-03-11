@@ -16,7 +16,7 @@ The main purpose of this repository is to ease the process of adding and upgradi
 include(":react-native-get-random-values")
 project(":react-native-get-random-values").projectDir = File(rootProject.projectDir, "node_modules/react-native-get-random-values/android")
 ```
-3. Run command `npm install` to install the new pacakge.
+3. Run command `npm install` to install the new package.
 4. Run command `./gradlew publishToMavenLocal` and check in `$HOME/.m2/repository` location that the dependency was created successfully with its artifact.
 5. TBD [How the Buildkite pipeline will publish it to S3]
 
