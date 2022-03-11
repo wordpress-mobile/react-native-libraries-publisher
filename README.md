@@ -4,6 +4,8 @@ The main purpose of this repository is to ease the process of adding and upgradi
 
 **For now, this repository only supports dependencies that don’t have a forked repository, so when adding a package note that we can only use versions from the NPM registry (e.g. `"react-native-get-random-values": "1.4.0"`).**
 
+**NOTE:** This setup might not work for all dependencies. In the future, it might require further modifications to get new packages published.
+
 ## How to publish an artifact of a dependency
 
 ### When it's a new package
