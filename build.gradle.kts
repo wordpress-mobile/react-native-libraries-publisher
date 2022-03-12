@@ -85,7 +85,6 @@ subprojects {
 
     tasks.withType(com.automattic.android.publish.PrepareToPublishToS3Task::class.java) {
         val packageVersion = getPackageVersion(project.name)
-        println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
 
         // Override the default behaviour of 'publish-to-s3' plugin since we always want to specify the version
         tagName = packageVersion
