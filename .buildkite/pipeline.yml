@@ -1,0 +1,21 @@
+common-params:
+  &docker-container
+  docker#v3.8.0:
+    image: "public.ecr.aws/automattic/android-build-image:bc7c60a898d89d968aa8202c6b5bd08f91c1779e"
+    propagate-environment: true
+    environment:
+      # DO NOT MANUALLY SET THESE VALUES!
+      # They are passed from the Buildkite agent to the Docker container
+      - "AWS_ACCESS_KEY"
+      - "AWS_SECRET_KEY"
+
+steps:
+  - label: "Publish to S3"
+    plugins:
+      - *docker-container
+    command: |
+      source /root/.bashrc
+      nvm install && nvm use
+      npm install
+
+      .buildkite/publish-libraries.sh

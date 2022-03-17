@@ -1,7 +1,9 @@
+import com.automattic.android.publish.CheckS3Version
 import org.json.JSONObject
 
 plugins {
     id("com.android.library") apply false
+    id("com.automattic.android.publish-to-s3") apply false
 }
 
 val defaultCompileSdkVersion = 30
@@ -19,20 +21,11 @@ val packageDevDependencies = packageJson.optJSONObject("devDependencies")
 
 val reactNativeVersion = packageDevDependencies.optString("react-native")
 
+val publishGroupId = "org.wordpress-mobile"
+
 subprojects {
     apply(plugin = "maven-publish")
-
-    configure<PublishingExtension> {
-        repositories {
-            maven {
-                url = uri("s3://a8c-libs.s3.amazonaws.com/android")
-                credentials(AwsCredentials::class) {
-                    accessKey = System.getenv("AWS_ACCESS_KEY")
-                    secretKey = System.getenv("AWS_SECRET_KEY")
-                }
-            }
-        }
-    }
+    apply(plugin = "com.automattic.android.publish-to-s3")
 
     repositories {
         exclusiveContent {
@@ -64,9 +57,6 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        val packageVersion = getPackageVersion(project.name)
-                        println("Publishing configuration:\n\tartifactId=\"${project.name}\"\n\tversion=\"$packageVersion\"")
-
                         if (project.name == "react-native-reanimated" ) {
                             val defaultArtifacts = configurations.getByName("default").artifacts
                             if(defaultArtifacts.isEmpty()) {
@@ -78,9 +68,9 @@ subprojects {
                         else {
                             from(components.get("release"))
                         }
-                        groupId = "org.wordpress-mobile"
+                        groupId = publishGroupId
                         artifactId = project.name
-                        version = packageVersion
+                        // version is set by 'publish-to-s3' plugin
 
                         versionMapping {
                             allVariants {
@@ -89,6 +79,22 @@ subprojects {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    tasks.withType(com.automattic.android.publish.PrepareToPublishToS3Task::class.java) {
+        val packageVersion = getPackageVersion(project.name)
+
+        // Override the default behaviour of 'publish-to-s3' plugin since we always want to specify the version
+        tagName = packageVersion
+    }
+    tasks.register("assertVersionIsNotAlreadyPublished") {
+        doLast {
+            val packageVersion = getPackageVersion(project.name)
+            val checkS3Version = CheckS3Version(publishGroupId, project.name, packageVersion)
+            if (checkS3Version.check()) {
+                throw IllegalStateException("'${project.name}' version '$packageVersion' is already published!")
             }
         }
     }
