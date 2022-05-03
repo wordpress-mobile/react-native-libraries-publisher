@@ -14,6 +14,7 @@ react-native-webview
 react-native-masked-view
 react-native-clipboard
 react-native-gesture-handler
+react-native-prompt-android
 )
 
 for project in "${PROJECTS[@]}"
