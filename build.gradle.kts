@@ -106,5 +106,18 @@ fun getPackageVersion(projectName: String): String {
         projectName == "react-native-clipboard" -> "@react-native-clipboard/clipboard"
         else -> projectName
     }
-    return packageDevDependencies.optString(jsonProperty)
+    val packageVersion = packageDevDependencies.optString(jsonProperty)
+
+    // Extract version from filename of tarball URL
+    val isTarball = packageVersion.endsWith(".tgz")
+    if (isTarball) {
+        // Replace special characters of package name as "npm pack" command does, to be used in the filename.
+        // Reference: https://github.com/npm/cli/blob/699c2d708d2a24b4f495a74974b2a345f33ee08a/lib/pack.js#L66-L67
+        val packageNameSanitized = jsonProperty.replace("@", "").replace("/", "-")
+        val fileName = packageVersion.substring(packageVersion.lastIndexOf("/") + 1)
+        val version = fileName.replace(packageNameSanitized + "-", "").replace(".tgz", "")
+        return version
+    }
+
+    return packageVersion
 }

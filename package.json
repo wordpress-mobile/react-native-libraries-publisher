@@ -9,7 +9,8 @@
     "@react-native-masked-view/masked-view": "0.2.6",
     "@react-native-clipboard/clipboard": "1.9.0",
     "react-native-gesture-handler": "2.3.1",
-    "react-native": "0.66.2"
+    "react-native": "0.66.2",
+    "react-native-prompt-android": "https://raw.githubusercontent.com/wordpress-mobile/react-native-prompt-android/wp-fork-only-android-changes/react-native-prompt-android-1.0.0.tgz"
   },
   "dependencies": {
     "patch-package": "^6.4.7"
