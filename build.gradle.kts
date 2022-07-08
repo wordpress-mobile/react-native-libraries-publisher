@@ -9,11 +9,13 @@ plugins {
 val defaultCompileSdkVersion = 30
 val defaultMinSdkVersion = 21
 val defaultTargetSdkVersion = 30
+val excludeAppGlideModule = true
 
 // Set project extra properties
 project.ext.set("compileSdkVersion", defaultCompileSdkVersion)
 project.ext.set("minSdkVersion", defaultMinSdkVersion)
 project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
+project.ext.set("excludeAppGlideModule", excludeAppGlideModule)
 
 // Fetch dependencies versions from package.json
 val packageJson = JSONObject(File("$rootDir/package.json").readText())

@@ -9,6 +9,7 @@
     "@react-native-masked-view/masked-view": "0.2.6",
     "@react-native-clipboard/clipboard": "1.9.0",
     "react-native-gesture-handler": "2.3.1",
+    "react-native-fast-image": "8.5.11",
     "react-native": "0.66.2"
   },
   "dependencies": {
