@@ -8,6 +8,10 @@ The main purpose of this repository is to ease the process of adding and upgradi
 
 ## How to publish an artifact of a dependency
 
+### If you're introducing breaking changes to the publisher
+
+If you need to publish the same versions of the artifacts but with a breaking change, such as an updated `compileSdkVersion`, then the `publisherVersion` in `build.gradle.kts` will need to be incremented. Please see the documentation for `publisherVersion` in `build.gradle.kts` for more details.
+
 ### When it's a new package
 1. Add the package to the `devDependencies` section of the [`package.json` file](./package.json).
 
