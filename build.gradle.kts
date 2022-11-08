@@ -88,7 +88,17 @@ subprojects {
                         }
                         groupId = publishGroupId
                         artifactId = project.name
-                        // version is set by 'publish-to-s3' plugin
+
+                        // Version is overriden by 'publish-to-s3' plugin, however there seems to be an
+                        // edge case where the `.module` metadata file doesn't contain the correct
+                        // version information for some libraries (i.e. "react-native-fast-image").
+                        // So, we are setting the version information here as well.
+                        //
+                        // Hopefully we can address this in the `publish-to-s3-gradle-plugin`, but
+                        // even after it's fixed in the plugin, this is OK to keep. The reason we 
+                        // normally don't set it is to communicate that it'll be overriden, but with
+                        // this documentation in place, that's not a problem.
+                        version = getPackageVersion(project.name)
 
                         versionMapping {
                             allVariants {
