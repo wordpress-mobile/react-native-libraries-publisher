@@ -23,7 +23,7 @@ plugins {
 }
 
 val defaultCompileSdkVersion = 33
-val defaultMinSdkVersion = 21
+val defaultMinSdkVersion = 24
 val defaultTargetSdkVersion = 33
 val excludeAppGlideModule = true
 
