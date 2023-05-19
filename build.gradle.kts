@@ -15,16 +15,16 @@ import org.json.JSONObject
 // Although this allows different clients to use different artifacts, since we only have one client
 // this is now the most important use case for this implementation. Instead, this implementation
 // aims to make it easier to test publisher changes without having to override the artifacts.
-val publisherVersion = "v1"
+val publisherVersion = "v2"
 
 plugins {
     id("com.android.library") apply false
     id("com.automattic.android.publish-to-s3") apply false
 }
 
-val defaultCompileSdkVersion = 30
-val defaultMinSdkVersion = 21
-val defaultTargetSdkVersion = 30
+val defaultCompileSdkVersion = 33
+val defaultMinSdkVersion = 24
+val defaultTargetSdkVersion = 33
 val excludeAppGlideModule = true
 
 // Set project extra properties
