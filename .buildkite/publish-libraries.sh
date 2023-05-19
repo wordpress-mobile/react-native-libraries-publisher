@@ -12,7 +12,6 @@ react-native-svg
 react-native-webview
 react-native-masked-view
 react-native-clipboard
-react-native-gesture-handler
 react-native-fast-image
 )
 
