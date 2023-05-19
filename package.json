@@ -1,7 +1,6 @@
 {
   "devDependencies": {
     "react-native-get-random-values": "1.4.0",
-    "react-native-reanimated": "2.4.1",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "2.9.0",
     "react-native-svg": "9.13.6",

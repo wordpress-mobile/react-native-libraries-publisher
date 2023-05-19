@@ -6,7 +6,6 @@ set -euo pipefail
 
 PROJECTS=(
 react-native-get-random-values
-react-native-reanimate
 react-native-safe-area-context
 react-native-screen
 react-native-svg
