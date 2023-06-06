@@ -13,6 +13,7 @@ react-native-webview
 react-native-masked-view
 react-native-clipboard
 react-native-fast-image
+react-native-reanimated
 )
 
 for project in "${PROJECTS[@]}"
@@ -21,6 +22,11 @@ do
     ./gradlew :$project:assertVersionIsNotAlreadyPublished || EXIT_CODE=$?
     # If the project is not published already, publish it
     if [ $EXIT_CODE -eq 0 ]; then
-        ./gradlew :$project:publishS3PublicationToS3Repository
+        # Force using Hermes and adding the artifact when publishing Reanimated
+        if [ "${project}" == "react-native-reanimated" ]; then
+            CLIENT_SIDE_BUILD="True" JS_RUNTIME="hermes" ./gradlew :$project:publishS3PublicationToS3Repository
+        else
+            ./gradlew :$project:publishS3PublicationToS3Repository
+        fi
     fi
 done
