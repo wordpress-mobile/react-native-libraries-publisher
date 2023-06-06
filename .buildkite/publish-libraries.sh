@@ -14,6 +14,7 @@ react-native-masked-view
 react-native-clipboard
 react-native-fast-image
 react-native-reanimated
+react-native-gesture-handler
 )
 
 # `react-native-reanimated` library uses JSC by default. These env vars will force it to use Hermes instead.
