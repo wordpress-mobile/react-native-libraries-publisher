@@ -38,6 +38,7 @@ val packageJson = JSONObject(File("$rootDir/package.json").readText())
 val packageDevDependencies = packageJson.optJSONObject("devDependencies")
 
 val reactNativeVersion = packageDevDependencies.optString("react-native")
+val reactNativeMinorVersion = reactNativeVersion.split(".")[1].toInt()
 
 val publishGroupId = "org.wordpress-mobile.react-native-libraries.$publisherVersion"
 
@@ -64,8 +65,22 @@ subprojects {
     configurations.all {
         resolutionStrategy {
             dependencySubstitution {
-                substitute(module("com.facebook.react:react-native"))
-                    .with(module("com.facebook.react:react-native:$reactNativeVersion"))
+                if ( reactNativeMinorVersion >= 71 ) {
+                    // This substitution is based on React Native Gradle plugin.
+                    // Reference: https://t.ly/38jk
+                    substitute(module("com.facebook.react:react-android"))
+                        .with(module("com.facebook.react:react-android:$reactNativeVersion"))
+                    substitute(module("com.facebook.react:hermes-android"))
+                        .with(module("com.facebook.react:hermes-android:$reactNativeVersion"))
+                    // For backward-compatibility, we also substitute `react-native` module
+                    // with the new module `react-android`.
+                    substitute(module("com.facebook.react:react-native"))
+                        .with(module("com.facebook.react:react-android:$reactNativeVersion"))
+                }
+                else {
+                    substitute(module("com.facebook.react:react-native"))
+                        .with(module("com.facebook.react:react-native:$reactNativeVersion"))    
+                }
             }
         }
     }
