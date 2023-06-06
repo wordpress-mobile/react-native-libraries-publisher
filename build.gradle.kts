@@ -22,6 +22,7 @@ plugins {
     id("com.automattic.android.publish-to-s3") apply false
 }
 
+val disablePublishToS3 = System.getProperty("DISABLE_PUBLISH_TO_S3")?.toBoolean() ?: false
 val defaultCompileSdkVersion = 33
 val defaultMinSdkVersion = 24
 val defaultTargetSdkVersion = 33
@@ -43,7 +44,9 @@ val publishGroupId = "org.wordpress-mobile.react-native-libraries.$publisherVers
 
 subprojects {
     apply(plugin = "maven-publish")
-    apply(plugin = "com.automattic.android.publish-to-s3")
+    if ( !disablePublishToS3 ) {
+        apply(plugin = "com.automattic.android.publish-to-s3")
+    }
 
     repositories {
         exclusiveContent {
