@@ -16,17 +16,17 @@ react-native-fast-image
 react-native-reanimated
 )
 
+# `react-native-reanimated` library uses JSC by default. These env vars will force it to use Hermes instead.
+# Reference: https://t.ly/DQou
+export CLIENT_SIDE_BUILD="True"
+export JS_RUNTIME="hermes"
+
 for project in "${PROJECTS[@]}"
 do
     EXIT_CODE=0
     ./gradlew :$project:assertVersionIsNotAlreadyPublished || EXIT_CODE=$?
     # If the project is not published already, publish it
     if [ $EXIT_CODE -eq 0 ]; then
-        # Force using Hermes and adding the artifact when publishing Reanimated
-        if [ "${project}" == "react-native-reanimated" ]; then
-            CLIENT_SIDE_BUILD="True" JS_RUNTIME="hermes" ./gradlew :$project:publishS3PublicationToS3Repository
-        else
-            ./gradlew :$project:publishS3PublicationToS3Repository
-        fi
+        ./gradlew :$project:publishS3PublicationToS3Repository
     fi
 done
