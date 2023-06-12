@@ -6,6 +6,11 @@ The main purpose of this repository is to ease the process of adding and upgradi
 
 **NOTE:** This setup might not work for all dependencies. In the future, it might require further modifications to get new packages published.
 
+## Project Setup
+
+1. Clone this repository.
+2. Run command `npm install` to install the dependencies.
+
 ## How to publish an artifact of a dependency
 
 ### If you're introducing breaking changes to the publisher
