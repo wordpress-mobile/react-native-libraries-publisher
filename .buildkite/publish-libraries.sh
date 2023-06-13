@@ -13,7 +13,13 @@ react-native-webview
 react-native-masked-view
 react-native-clipboard
 react-native-fast-image
+react-native-reanimated
 )
+
+# `react-native-reanimated` library uses JSC by default. These env vars will force it to use Hermes instead.
+# Reference: https://t.ly/DQou
+export CLIENT_SIDE_BUILD="True"
+export JS_RUNTIME="hermes"
 
 for project in "${PROJECTS[@]}"
 do
