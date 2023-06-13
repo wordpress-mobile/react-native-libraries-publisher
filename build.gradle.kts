@@ -15,7 +15,7 @@ import org.json.JSONObject
 // Although this allows different clients to use different artifacts, since we only have one client
 // this is now the most important use case for this implementation. Instead, this implementation
 // aims to make it easier to test publisher changes without having to override the artifacts.
-val publisherVersion = "v2"
+val publisherVersion = "v3"
 
 plugins {
     id("com.android.library") apply false
@@ -64,8 +64,16 @@ subprojects {
     configurations.all {
         resolutionStrategy {
             dependencySubstitution {
+                // This substitution is based on React Native Gradle plugin.
+                // Reference: https://t.ly/38jk
+                substitute(module("com.facebook.react:react-android"))
+                    .with(module("com.facebook.react:react-android:$reactNativeVersion"))
+                substitute(module("com.facebook.react:hermes-android"))
+                    .with(module("com.facebook.react:hermes-android:$reactNativeVersion"))
+                // For backward-compatibility, we also substitute `react-native` module
+                // with the new module `react-android`.
                 substitute(module("com.facebook.react:react-native"))
-                    .with(module("com.facebook.react:react-native:$reactNativeVersion"))
+                    .with(module("com.facebook.react:react-android:$reactNativeVersion"))
             }
         }
     }
