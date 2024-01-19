@@ -55,7 +55,7 @@ Once the package is added as a dependency, or if it was already included, add a 
 
 **Example**:
 ```
-implementation "org.wordpress-mobile:react-native-get-random-values:${extractPackageVersion(packageJson, 'react-native-get-random-values', 'dependencies')}"
+implementation "org.wordpress.react-native-libraries:react-native-get-random-values:${extractPackageVersion(packageJson, 'react-native-get-random-values', 'dependencies')}"
 ```
 
 **NOTE:** The version of the artifact will be extracted from the `package.json` file of the package.
