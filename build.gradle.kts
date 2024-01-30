@@ -22,9 +22,9 @@ plugins {
     id("com.automattic.android.publish-to-s3") apply false
 }
 
-val defaultCompileSdkVersion = 33
+val defaultCompileSdkVersion = 34
 val defaultMinSdkVersion = 24
-val defaultTargetSdkVersion = 33
+val defaultTargetSdkVersion = 34
 val excludeAppGlideModule = true
 
 // Set project extra properties
