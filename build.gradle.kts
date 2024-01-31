@@ -1,5 +1,7 @@
 import com.automattic.android.publish.CheckS3Version
-import org.json.JSONObject
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser;
 
 // This value is introduced to control breaking changes to the publisher itself.
 // Whenever we need to make a change, such as updating the `compileSdkVersion`, we will want to
@@ -15,7 +17,7 @@ import org.json.JSONObject
 // Although this allows different clients to use different artifacts, since we only have one client
 // this is now the most important use case for this implementation. Instead, this implementation
 // aims to make it easier to test publisher changes without having to override the artifacts.
-val publisherVersion = "v4"
+val publisherVersion = "v5"
 
 plugins {
     id("com.android.library") apply false
@@ -26,18 +28,21 @@ val defaultCompileSdkVersion = 33
 val defaultMinSdkVersion = 24
 val defaultTargetSdkVersion = 33
 val excludeAppGlideModule = true
+val kotlinVersion = "1.8.0"
 
 // Set project extra properties
 project.ext.set("compileSdkVersion", defaultCompileSdkVersion)
 project.ext.set("minSdkVersion", defaultMinSdkVersion)
 project.ext.set("targetSdkVersion", defaultTargetSdkVersion)
 project.ext.set("excludeAppGlideModule", excludeAppGlideModule)
+project.ext.set("kotlinVersion", kotlinVersion)
 
 // Fetch dependencies versions from package.json
-val packageJson = JSONObject(File("$rootDir/package.json").readText())
-val packageDevDependencies = packageJson.optJSONObject("devDependencies")
+val packageJson: JsonElement = JsonParser.parseString(File("$rootDir/package.json").readText())
+val packageJsonObject: JsonObject = packageJson.asJsonObject
+val packageDevDependencies: JsonObject = packageJsonObject.getAsJsonObject("devDependencies")
 
-val reactNativeVersion = packageDevDependencies.optString("react-native")
+val reactNativeVersion: String = packageDevDependencies.get("react-native").asString
 
 val publishGroupId = "org.wordpress.react-native-libraries.$publisherVersion"
 
@@ -67,13 +72,13 @@ subprojects {
                 // This substitution is based on React Native Gradle plugin.
                 // Reference: https://t.ly/38jk
                 substitute(module("com.facebook.react:react-android"))
-                    .with(module("com.facebook.react:react-android:$reactNativeVersion"))
+                    .using(module("com.facebook.react:react-android:$reactNativeVersion"))
                 substitute(module("com.facebook.react:hermes-android"))
-                    .with(module("com.facebook.react:hermes-android:$reactNativeVersion"))
+                    .using(module("com.facebook.react:hermes-android:$reactNativeVersion"))
                 // For backward-compatibility, we also substitute `react-native` module
                 // with the new module `react-android`.
                 substitute(module("com.facebook.react:react-native"))
-                    .with(module("com.facebook.react:react-android:$reactNativeVersion"))
+                    .using(module("com.facebook.react:react-android:$reactNativeVersion"))
             }
         }
     }
@@ -83,17 +88,7 @@ subprojects {
             configure<PublishingExtension> {
                 publications {
                     create<MavenPublication>("S3") {
-                        if (project.name == "react-native-reanimated" ) {
-                            val defaultArtifacts = configurations.getByName("default").artifacts
-                            if(defaultArtifacts.isEmpty()) {
-                                throw Exception("'$name' - No default artifact found, aborting publishing!")
-                            }
-                            val defaultArtifact = defaultArtifacts.getFiles().getSingleFile()
-                            artifact(defaultArtifact)
-                        }
-                        else {
-                            from(components.get("release"))
-                        }
+                        from(components["release"])
                         groupId = publishGroupId
                         artifactId = project.name
 
@@ -137,10 +132,10 @@ subprojects {
 }
 
 fun getPackageVersion(projectName: String): String {
-    val jsonProperty = when {
-        projectName == "react-native-masked-view" -> "@react-native-masked-view/masked-view"
-        projectName == "react-native-clipboard" -> "@react-native-clipboard/clipboard"
+    val jsonProperty = when (projectName) {
+        "react-native-masked-view" -> "@react-native-masked-view/masked-view"
+        "react-native-clipboard" -> "@react-native-clipboard/clipboard"
         else -> projectName
     }
-    return packageDevDependencies.optString(jsonProperty)
+    return packageDevDependencies.get(jsonProperty).asString
 }
