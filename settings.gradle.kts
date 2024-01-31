@@ -1,7 +1,7 @@
 pluginManagement {
     plugins {
-        id("com.android.library").version("4.2.2")
-        id("com.automattic.android.publish-to-s3").version("0.7.0")
+        id("com.android.library").version("7.4.2")
+        id("com.automattic.android.publish-to-s3").version("0.8.0")
     }
     repositories {
         maven {
