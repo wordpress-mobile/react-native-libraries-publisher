@@ -1,7 +1,5 @@
 import com.automattic.android.publish.CheckS3Version
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser;
+import org.json.JSONObject
 
 // This value is introduced to control breaking changes to the publisher itself.
 // Whenever we need to make a change, such as updating the `compileSdkVersion`, we will want to
@@ -38,11 +36,9 @@ project.ext.set("excludeAppGlideModule", excludeAppGlideModule)
 project.ext.set("kotlinVersion", kotlinVersion)
 
 // Fetch dependencies versions from package.json
-val packageJson: JsonElement = JsonParser.parseString(File("$rootDir/package.json").readText())
-val packageJsonObject: JsonObject = packageJson.asJsonObject
-val packageDevDependencies: JsonObject = packageJsonObject.getAsJsonObject("devDependencies")
-
-val reactNativeVersion: String = packageDevDependencies.get("react-native").asString
+val packageJson = JSONObject(File("$rootDir/package.json").readText())
+val packageDevDependencies: JSONObject = packageJson.optJSONObject("devDependencies")
+val reactNativeVersion: String = packageDevDependencies.optString("react-native")
 
 val publishGroupId = "org.wordpress.react-native-libraries.$publisherVersion"
 
@@ -137,5 +133,5 @@ fun getPackageVersion(projectName: String): String {
         "react-native-clipboard" -> "@react-native-clipboard/clipboard"
         else -> projectName
     }
-    return packageDevDependencies.get(jsonProperty).asString
+    return packageDevDependencies.optString(jsonProperty)
 }
