@@ -10,8 +10,6 @@ x-common-params:
         - "AWS_SECRET_KEY"
   - &nvm_plugin
     automattic/nvm#0.3.0:
-      # This is an attempt to fix curl error (92) during installing nodejs.
-      curlrc: --http1.1
 
 steps:
   - label: "Publish to Maven Local (to verify build)"
