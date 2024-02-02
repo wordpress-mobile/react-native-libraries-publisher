@@ -3,6 +3,7 @@ common-params:
   docker#v3.8.0:
     image: "public.ecr.aws/automattic/android-build-image:d60763dc78dfafe152e1539453a480af5094a0e7"
     propagate-environment: true
+    shell: ["/bin/bash", "--login", "-c"]
     environment:
       # DO NOT MANUALLY SET THESE VALUES!
       # They are passed from the Buildkite agent to the Docker container
@@ -12,7 +13,8 @@ common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
-      source /root/.bash
+      source /root/.bashrc
+      source $HOME/.nvm
       nvm install && nvm use
       npm install
       ./gradlew publishToMavenLocal
