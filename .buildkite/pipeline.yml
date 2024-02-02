@@ -3,7 +3,6 @@ common-params:
   docker#v3.8.0:
     image: "public.ecr.aws/automattic/android-build-image:9d1710c7d74d1349d84e94465fe7b3a90216e92a"
     propagate-environment: true
-    shell: ["/bin/bash", "--login", "-c"]
     environment:
       # DO NOT MANUALLY SET THESE VALUES!
       # They are passed from the Buildkite agent to the Docker container
