@@ -12,6 +12,8 @@ common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
       source /root/.bashrc
       nvm install && nvm use
       npm install
@@ -23,7 +25,8 @@ steps:
       - *docker-container
     if: build.branch == "trunk"
     command: |
-      source /root/.bashrc
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
       nvm install && nvm use
       npm install
 
