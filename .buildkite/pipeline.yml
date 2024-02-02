@@ -1,6 +1,13 @@
 x-common-params:
-  - &ci_toolkit
-    automattic/a8c-ci-toolkit#3.0.1
+  - &docker-container
+    docker#v3.8.0:
+      image: "public.ecr.aws/automattic/android-build-image:v1.3.0"
+      propagate-environment: true
+      environment:
+       # DO NOT MANUALLY SET THESE VALUES!
+        # They are passed from the Buildkite agent to the Docker container
+        - "AWS_ACCESS_KEY"
+        - "AWS_SECRET_KEY"
   - &nvm_plugin
     automattic/nvm#0.3.0:
       # This is an attempt to fix curl error (92) during installing nodejs.
@@ -12,11 +19,11 @@ steps:
       npm install
       ./gradlew publishToMavenLocal
     plugins:
-      - *ci_toolkit
+      - *docker-container
       - *nvm_plugin
   - label: "Publish to S3"
     plugins:
-      - *ci_toolkit
+      - *docker-container
       - *nvm_plugin
     if: build.branch == "trunk"
     command: |
