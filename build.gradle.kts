@@ -17,6 +17,15 @@ import org.json.JSONObject
 // aims to make it easier to test publisher changes without having to override the artifacts.
 val publisherVersion = "v5"
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.json:json:20180813")
+    }
+}
+
 plugins {
     id("com.android.library") apply false
     id("com.automattic.android.publish-to-s3") apply false
