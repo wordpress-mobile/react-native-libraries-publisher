@@ -1,5 +1,3 @@
-agents: { queue: "android" }
-
 x-common-params:
   - &ci_toolkit
     automattic/a8c-ci-toolkit#3.0.1
