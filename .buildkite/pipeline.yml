@@ -10,12 +10,12 @@ common-params:
       - "AWS_SECRET_KEY"
 
 steps:
-  - label: "Dry run publications"
+  - label: "Publish to Maven Local (to verify build)"
     command: |
       source /root/.bashrc
       nvm install && nvm use
       npm install
-      ./gradlew publishAllPublicationsToS3Repository --dry-run
+      ./gradlew publishToMavenLocal
     plugins:
       - *docker-container
   - label: "Publish to S3"
