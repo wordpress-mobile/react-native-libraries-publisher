@@ -12,10 +12,7 @@ common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      source /root/.bashrc
-      source $HOME/.nvm
+      source /root/.bash
       nvm install && nvm use
       npm install
       ./gradlew publishToMavenLocal
