@@ -1,7 +1,7 @@
 common-params:
   &docker-container
   docker#v3.8.0:
-    image: "public.ecr.aws/automattic/android-build-image:d60763dc78dfafe152e1539453a480af5094a0e7"
+    image: "public.ecr.aws/automattic/android-build-image:9d1710c7d74d1349d84e94465fe7b3a90216e92a"
     propagate-environment: true
     shell: ["/bin/bash", "--login", "-c"]
     environment:
@@ -13,9 +13,6 @@ common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
-      source /root/.bashrc
-      source $HOME/.nvm
-      nvm install && nvm use
       npm install
       ./gradlew publishToMavenLocal
     plugins:
@@ -25,9 +22,6 @@ steps:
       - *docker-container
     if: build.branch == "trunk"
     command: |
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      nvm install && nvm use
       npm install
 
       .buildkite/publish-libraries.sh
