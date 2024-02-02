@@ -10,9 +10,18 @@ common-params:
       - "AWS_SECRET_KEY"
 
 steps:
+  - label: "Dry run publications"
+    command: |
+      source /root/.bashrc
+      nvm install && nvm use
+      npm install
+      ./gradlew publishAllPublicationsToS3Repository --dry-run
+    plugins:
+      - *docker-container
   - label: "Publish to S3"
     plugins:
       - *docker-container
+    if: build.branch == "trunk"
     command: |
       source /root/.bashrc
       nvm install && nvm use
