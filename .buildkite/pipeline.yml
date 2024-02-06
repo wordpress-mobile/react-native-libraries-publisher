@@ -11,7 +11,7 @@ x-common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
-      sdkmanager --install ndk;23.1.7779620
+      sdkmanager --install "ndk;23.1.7779620"
       npm install
       ./gradlew publishToMavenLocal
     plugins:
@@ -23,6 +23,6 @@ steps:
       - *nvm_plugin
     if: build.branch == "trunk"
     command: |
-      sdkmanager --install ndk;23.1.7779620
+      sdkmanager --install "ndk;23.1.7779620"
       npm install
       .buildkite/publish-libraries.sh
