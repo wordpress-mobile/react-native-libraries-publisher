@@ -1,7 +1,7 @@
 common-params:
   &docker-container
   docker#v3.8.0:
-    image: "public.ecr.aws/automattic/android-build-image:bc7c60a898d89d968aa8202c6b5bd08f91c1779e"
+    image: "public.ecr.aws/automattic/android-build-image:9d1710c7d74d1349d84e94465fe7b3a90216e92a"
     propagate-environment: true
     environment:
       # DO NOT MANUALLY SET THESE VALUES!
@@ -10,12 +10,17 @@ common-params:
       - "AWS_SECRET_KEY"
 
 steps:
+  - label: "Publish to Maven Local (to verify build)"
+    command: |
+      npm install
+      ./gradlew publishToMavenLocal
+    plugins:
+      - *docker-container
   - label: "Publish to S3"
     plugins:
       - *docker-container
+    if: build.branch == "trunk"
     command: |
-      source /root/.bashrc
-      nvm install && nvm use
       npm install
 
       .buildkite/publish-libraries.sh
