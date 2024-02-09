@@ -13,6 +13,7 @@ steps:
     command: |
       whoami
       ls -la $(which sdkmanager)
+      sudo chown $USER:$USER $(which sdkmanager)
       sdkmanager --install "ndk;23.1.7779620"
       npm install
       ./gradlew publishToMavenLocal
