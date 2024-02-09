@@ -11,6 +11,7 @@ x-common-params:
 steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
+      which sdkmanager
       ls -la $ANDROID_HOME/tools/bin
       sdkmanager --install "ndk;23.1.7779620"
       npm install
