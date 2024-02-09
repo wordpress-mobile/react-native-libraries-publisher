@@ -12,7 +12,8 @@ steps:
   - label: "Publish to Maven Local (to verify build)"
     command: |
       whoami
-      ls -la $(which sdkmanager)
+      stat $(which sdkmanager)
+      groups $USER
       sudo chown $USER:$USER $(which sdkmanager)
       sdkmanager --install "ndk;23.1.7779620"
       npm install
